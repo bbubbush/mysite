@@ -134,7 +134,8 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
         candidates = Candidate.objects.all() #Candidate에 있는 모든 객체를 불러옵니다
         str = "" #마지막에 return해 줄 문자열입니다.
         for candidate in candidates:
-            str += "{}기호 {}번 ({})<BR>".format(candidate.name, candidate.party_number, candidate.area) #<BR>은 html에서 다음 줄로 이동하기 위해 쓰입니다.
+            #<BR>은 html에서 다음 줄로 이동하기 위해 쓰입니다.
+            str += "{}기호 {}번 ({})<BR>".format(candidate.name, candidate.party_number, candidate.area) 
             str += candidate.introduction + "<P>" #<P>는 html에서 단락을 바꾸기 위해 쓰입니다.
         return HttpResponse(str)
     ```
@@ -152,9 +153,9 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
     - 필요에 따라 index.html 과 views.py 수정
 >Java의 MVC패턴과 비슷하다고 봐도 무방. Front와 Back의 분리
 
+>Django의 경우 메모리에 올릴 때 모든 app의 template를 한곳에 모으기 때문에 중복과 충돌을 막기 위해 한번 더 app_name의 폴더를 만들어 경로를 분리
 
-
-
+~~#### Day 1 정리 끝~~
 
 Day 2 (17/12/14)  
 ~ 여론조사 화면 구현
