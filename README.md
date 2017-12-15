@@ -46,8 +46,8 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
         #C\Code\mysite\elections\views.py  
         from django.shortcuts import render  
         from django.http import HttpResponse 
-         
-        def index(request):
+
+        def index(request):  
             return HttpResponse("Hello world")
 
 
