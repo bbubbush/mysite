@@ -64,6 +64,7 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
     - app_name 폴더 안에 있는 models.py에 정의
     - 모델 class는 models.Model을 상속 받아야 함(아래 코드 참조)
     >Tip.  Django에서 보통 model이름은 대문자로 시작하며, 단수형으로 사용
+    
         ```{.python}
         # C:\Code\mysite\elections\models.py
 
