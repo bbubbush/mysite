@@ -15,13 +15,13 @@ Day 1 (17/12/14)
 1. Django 프로젝트 생성
     - Power Shell으로 프로젝트를 만들 위치로 이동 후 
 
-        django-admin startproject {project_name} 
+    >django-admin startproject {project_name} 
 
 
 2. Django 서버 실행
     - Power Shell으로 프로젝트 안으로 이동(manage.py가 있는 위치)
 
-        python manage.py runserver port_number(생략시 8000)
+    >python manage.py runserver port_number(생략시 8000)
 
 
 3. Django 서버 접속
