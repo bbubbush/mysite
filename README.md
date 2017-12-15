@@ -42,12 +42,12 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
 2. index 함수 만들기
     - Power Shell으로 앱 안으로 이동(app_name을 elections로 만들었으므로 elections로 이동)
     - views.py(\프로젝트이름\앱이름\views.py) 수정 - 페이지 요청에 대해 hello world라는 httpResponse를 리턴
-        #C\Code\mysite\elections\views.py
-        from django.shortcuts import render
-        from django.http import HttpResponse
+    >#C\Code\mysite\elections\views.py
+    from django.shortcuts import render
+    from django.http import HttpResponse
 
-        def index(request):
-            return HttpResponse("Hello world")
+    def index(request):
+        return HttpResponse("Hello world")
 
 
 Day 2 (17/12/14)  
