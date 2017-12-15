@@ -43,14 +43,14 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
     - Power Shell으로 앱 안으로 이동(app_name을 elections로 만들었으므로 elections로 이동)
     - views.py(\프로젝트이름\앱이름\views.py) 수정 - 페이지 요청에 대해 hello world라는 httpResponse를 리턴
 
-        ```{.python}
-        #C\Code\mysite\elections\views.py  
-        from django.shortcuts import render  
-        from django.http import HttpResponse 
+    ```{.python}
+    #C\Code\mysite\elections\views.py  
+    from django.shortcuts import render  
+    from django.http import HttpResponse 
 
-        def index(request):  
-            return HttpResponse("Hello world")
-        ```
+    def index(request):  
+        return HttpResponse("Hello world")
+    ```
 3. app에 접근할 조건을 지정하는 함수 만들기
     - \프로젝트명\프로젝트명\urls.py에 urlpatterns 수정
 
@@ -65,15 +65,15 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
     - 모델 class는 models.Model을 상속 받아야 함(아래 코드 참조)
     >Tip.  Django에서 보통 model이름은 대문자로 시작하며, 단수형으로 사용
 
-        ```{.python}
-        # C:\Code\mysite\elections\models.py
+    ```{.python}
+    # C:\Code\mysite\elections\models.py
 
-        class Candidate(models.Model):
-            name = models.CharField(max_length=10)
-            introduction = models.TextField()
-            area = models.CharField(max_length=15)
-            party_number = models.IntegerField(default=1)
-        ```
+    class Candidate(models.Model):
+        name = models.CharField(max_length=10)
+        introduction = models.TextField()
+        area = models.CharField(max_length=15)
+        party_number = models.IntegerField(default=1)
+    ```
 
 #### [ mygrations와 DB ]
 1. 모델을 DB에 저장하기 위한 준비 과정
