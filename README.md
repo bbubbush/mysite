@@ -43,14 +43,53 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
     - Power Shell으로 앱 안으로 이동(app_name을 elections로 만들었으므로 elections로 이동)
     - views.py(\프로젝트이름\앱이름\views.py) 수정 - 페이지 요청에 대해 hello world라는 httpResponse를 리턴
 
-    ```{.python}
-    #C\Code\mysite\elections\views.py  
-    from django.shortcuts import render  
-    from django.http import HttpResponse 
+        ```{.python}
+        #C\Code\mysite\elections\views.py  
+        from django.shortcuts import render  
+        from django.http import HttpResponse 
 
-    def index(request):  
-        return HttpResponse("Hello world")
+        def index(request):  
+            return HttpResponse("Hello world")
+        ```
+3. app에 접근할 조건을 지정하는 함수 만들기
+    - \프로젝트명\프로젝트명\urls.py에 urlpatterns 수정
+
+4. 앞에서 생성한 index함수를 실행할 조건을 지정하는 함수 만들기
+    - 앞서 생성한 {app_name}폴더로 이동
+    - urls.py 파일 생성(app_name 폴더 안에 만들어야 함)
+    - urls.py에 urlpatterns로 index 함수를 지정
+
+#### [ 모델 클래스 ]
+1. app과 관련된 정보를 저장
+    - app_name 폴더 안에 있는 models.py에 정의
+    - 모델 class는 models.Model을 상속 받아야 함(아래 코드 참조)
+    >Tip.  Django에서 보통 model이름은 대문자로 시작하며, 단수형으로 사용
+        ```{.python}
+        # C:\Code\mysite\elections\models.py
+
+        class Candidate(models.Model):
+            name = models.CharField(max_length=10)
+            introduction = models.TextField()
+            area = models.CharField(max_length=15)
+            party_number = models.IntegerField(default=1)
+        ```
+
+#### [ mygrations와 DB ]
+1. 모델을 DB에 저장하기 위한 준비 과정
+    - project_name 안에 있는 settings.py 안에 있는 INSTALLED_APPS 리스트에 elections(앱이름) 추가
+    ```{.python}
+    #C\Code\mysite\mysite\settings.py
+    ...
+    INSTALLED_APPS = [
+        ...,
+        '{app_name}' #추가
+    ]
+    ...
     ```
+    - Power Shell로 project_name으로 이동 후 아래 명령어를 순서대로 입력
+    >python manage.py makemigrations
+    >python manage.py migrate
+
 
 
 Day 2 (17/12/14)  
