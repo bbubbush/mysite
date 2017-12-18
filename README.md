@@ -206,7 +206,7 @@ Day 2 (17/12/15)
 >python manage.py makemigrations  
 python manage.py migrate  
 
-    순으로 migrate 해야 한다
+순으로 migrate 해야 한다
 
 >여기서 고생이 많았는데 아무리 makemigrations를 해도 변화를 찾지 못해서이다. 처음엔 makemigrations 뒤에 app_name을 적어 해결되는 듯 했으나 그러면 0002의 새로운 파일이 생성되는 것이 아니라 0001의 Candidate 클래스가 만들어 진 곳에 오버라이드 되듯 덮어씌어졌다.
 그래서 찾은 해결법이 다른 폴더에 새로운 프로젝트를 생성하고 아무런 정보가 기록되지 않은 db.sqlite3를 기존의 파일에 덮어쓰기해서 해결했다.
@@ -317,20 +317,134 @@ python manage.py migrate
 Day 3 (17/12/18)
 
 #### [ 여론조사 결과보기1 - http redirect하기 ]
+>HttpResponse가 바로 템플릿으로 이동한다면 HttpResponseRedirect는 views.py로 다시 이동한다 더 자세한 차이는 검색 고고
+
+>jsp에서 게시판 수정이나 삭제 등은 처리가 된 후에 alert으로 간단한 메시지 표시 이후에 다시 홈으로 이동하게 처리했던 것과 비슷하다
 
 #### [ 여론조사 결과보기2 - 후보 표시하기 ]
+1. views.py에서 result함수를 통해 전달한 후보 데이터를 가져오기
+    ```{.python}
+    # C:\Code\mysite\elections\views.py
+
+    def results(request, area):
+        candidates = Candidate.objects.filter(area = area)
+        polls = Poll.objects.filter(area = area)
+        poll_results = []
+        for poll in polls:
+            result = {}
+            result['start_date'] = poll.start_date
+            result['end_date'] = poll.end_date
+
+            poll_results.append(result)
+
+        context = {'candidates':candidates, 'area':area,
+        'poll_results' : poll_results}
+        return render(request, 'elections/result.html', context)
+    ```
+2. result.html에 for문을 이용하여 가져온 데이터 표시하기
+    - 간단한 작업이니 생략
 
 #### [ 여론조사 결과보기3 - Dictionary로 데이터 정리하기 ]
+1. 득표율을 구하는 비즈니스코드(핵심만 표시)
+    ```{.python}
+    # poll.id에 해당하는 전체 투표수
+    total_votes = Choice.objects.filter(poll_id = poll.id).aggregate(Sum('votes'))
+    result['total_votes'] = total_votes['votes__sum']
+
+    rates = [] #지지율
+    for candidate in candidates:
+        # choice가 하나도 없는 경우 - 예외처리로 0을 append
+        try:
+            choice = Choice.objects.get(poll = poll, candidate = candidate)
+            rates.append(
+                round(choice.votes * 100 / result['total_votes'], 1)
+                )
+        except :
+            rates.append(0)
+    result['rates'] = rates
+    poll_results.append(result)
+    ```
+    - 전체 표를 먼저 구한 후 각 후의 표를 가져와서 백분율로 표시
 
 #### [ 404 오류 ]
+1. HttpResponseNotFound로 예외처리
+    ```{.python}
+    def candidates(request, name):
+        try :
+            candidate = Candidate.objects.get(name = name)
+        except:
+            return HttpResponseNotFound("없는 페이지 입니다.")
+        return HttpResponse(candidate.name)
+    ```
+
+2. Http404로 예외처리
+    ```{.python}
+    def candidates(request, name):
+        try :
+            candidate = Candidate.objects.get(name = name)
+        except:
+            raise Http404
+        return HttpResponse(candidate.name)
+    ```
+
+3. get_object_or_404로 예외처리
+    ```{.python}
+    def candidates(request, name):
+        candidate = get_object_or_404(Candidate, name = name)
+        return HttpResponse(candidate.name)
+    ```
+>3개 모두 import를 해야 사용할 수 있으며 주소패턴을 벗어난 접근이나 주소패턴은 맞으나 views.py에 정의되지 않은 접근은 서로 다른 예외가 발생하므로 2번 혹은 3번을 통해 묶어서 처리할 수 있다.
+
 
 #### [ 404페이지 변경하기 ]
+1. 디버그 설정과 디렉토리 설정 바꿔주기
+    - settings.py에서 DEBUG = False로 변경
+    - ALLOWED_HOSTS = ['localhost'] 변경
+    - TEMPLATES = [
+        {
+            ...
+            'DIRS' : ['templates'],
+            ...
+        }
+        ]
+        추가
+
+2. 404파일 만들어주기
+    - root에 templates 폴더를 만들고 그 안에 404.html을 만들면 자동으로 404예외시 이 파일을 호출하여 보여준다
 
 #### [ Template 상속 ]
+공통된 html코드는 상속을 통해 뿌려줄 수 있다.
+
+1. layout.html 설정
+    - 공통된 html코드를 layout.html에 모아둔다
+    - 변수로 활용되어야 하는 곳은 {% block 변수명 %}{% endblock %} 을 통해 지정한다
+
+2. layout.html을 상속하기
+    - 상속이 필요한 파일들은 맨 위에 {% extends 'elections/layout.html' %} 을 입력하여 상속
+
+> 코드의 재사용성을 높이고 관리가 편하기 때문에 상속을 사용하여 template을 관리하는 것은 매우 유용
 
 #### [ 네비게이션바 추가하기 ]
+여기는 크게 특별한 부분은 없으나  urls.py파일에서 url 패턴에 name을 지정할 수 있다는 것을 알려준다
+
+    ```{.python}
+    app_name = 'elections'
+    urlpatterns = [
+        url(r'^$', views.index, name = 'home')
+    ]
+    ```
 
 #### [ 파일 사용하기 ]
+1. static폴더를 통해 파일을 관리
+    - templates와 마찬가지로 app마다 가지고 있는 static을 하나로 합쳐서 관리하기 떄문에 static폴더 내에 app_name의 폴더를 하나 더 만들어서 관리해야 한다
+
+2. template에서 static 내의 파일을 사용하기 위해선
+
+>{% load staticfiles %}
+
+를 추가해야 한다
+
+    - staic 파일의 주소값을 적을 땐 {% static '경로' %}를 사용
 
 
 
