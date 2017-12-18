@@ -283,18 +283,17 @@ python manage.py migrate
 
 **예외처리가 잘 되지 않는 경우 다음을 추가**
 
-
-    ```{.python}
-    # C:\Code\mysite\settings.py
-    ...
-    DATABASES = {
-        #유지해주세요
-    }
-    DATABASE_OPTIONS = {'charset': 'utf8'} #추가
-    TIME_ZONE = 'Asia/Seoul' #추가
-    LANGUAGE_CODE = 'ko-kr' #추가
-    ...
-    ```
+```{.python}
+# C:\Code\mysite\settings.py
+...
+DATABASES = {
+    #유지해주세요
+}
+DATABASE_OPTIONS = {'charset': 'utf8'} #추가
+TIME_ZONE = 'Asia/Seoul' #추가
+LANGUAGE_CODE = 'ko-kr' #추가
+...
+```
 #### [ 여론조사 결과 저장 ]
 1. 투표 결과를 DB에 저장
     - 해당 여론조사의 후보에게 투표할 경우 poll_id, cadidate_id 두 값을 가지고 투표 결과에 +1 시켜주면 된다
@@ -427,22 +426,18 @@ Day 3 (17/12/18)
 #### [ 네비게이션바 추가하기 ]
 여기는 크게 특별한 부분은 없으나  urls.py파일에서 url 패턴에 name을 지정할 수 있다는 것을 알려준다
 
-    ```{.python}
-    app_name = 'elections'
-    urlpatterns = [
-        url(r'^$', views.index, name = 'home')
-    ]
-    ```
+```{.python}
+app_name = 'elections'
+urlpatterns = [
+    url(r'^$', views.index, name = 'home')
+]
+```
 
 #### [ 파일 사용하기 ]
 1. static폴더를 통해 파일을 관리
     - templates와 마찬가지로 app마다 가지고 있는 static을 하나로 합쳐서 관리하기 떄문에 static폴더 내에 app_name의 폴더를 하나 더 만들어서 관리해야 한다
 
-2. template에서 static 내의 파일을 사용하기 위해선
-
->{% load staticfiles %}
-
-를 추가해야 한다
+2. template에서 static 내의 파일을 사용하기 위해선 {% load staticfiles %} 를 추가해야 한다
 
     - staic 파일의 주소값을 적을 땐 {% static '경로' %}를 사용
 
@@ -455,4 +450,4 @@ Day 3 (17/12/18)
 
 
 
-https://programmers.co.kr/learn/courses/6
+출처 : https://programmers.co.kr/learn/courses/6
