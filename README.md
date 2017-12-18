@@ -206,7 +206,7 @@ Day 2 (17/12/15)
 >python manage.py makemigrations  
 python manage.py migrate  
 
-순으로 migrate 해야 한다
+    순으로 migrate 해야 한다
 
 >여기서 고생이 많았는데 아무리 makemigrations를 해도 변화를 찾지 못해서이다. 처음엔 makemigrations 뒤에 app_name을 적어 해결되는 듯 했으나 그러면 0002의 새로운 파일이 생성되는 것이 아니라 0001의 Candidate 클래스가 만들어 진 곳에 오버라이드 되듯 덮어씌어졌다.
 그래서 찾은 해결법이 다른 폴더에 새로운 프로젝트를 생성하고 아무런 정보가 기록되지 않은 db.sqlite3를 기존의 파일에 덮어쓰기해서 해결했다.
@@ -311,6 +311,9 @@ python manage.py migrate
         url(r'^polls/(?P<poll_id>\d+)/$', views.polls), #이 url에 대한 요청을 views.polls가 처리하게 만듭니다.
     ]
     ```
+
+#### ~~Day 2 정리 끝~~
+
 Day 3 (17/12/18)
 
 #### [ 여론조사 결과보기1 - http redirect하기 ]
