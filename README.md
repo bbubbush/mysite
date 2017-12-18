@@ -186,17 +186,129 @@ Day 2 (17/12/15)
     {% endfor %}
     ```
 
-
 #### [ MVC 패턴 ]
+1. Model(데이터) - models.py
+    - Candidate 클래스의 형식대로 데이터를 DB에 저장 및 호출
+
+2. View(화면) - templates
+    - 화면에 어떤 장면을 보여줄지를 결정
+
+3. Controller(조율) - views.py
+    - Candidate 모델에서 데이터를 읽어 index.html에 전달
+
+>Django에서는 컨트롤러의 역할을 views.py에서 한다. 따라서 View를 담당한다고 혼동하기 쉽기 때문에 MTV라고 부르기도 한다. 
 
 #### [ 여론조사 모델 ]
+1. models.py에 Poll, Choice 클래스를 정의한다
+2. 등록한 model을 admin을 통해 관리하기 위해 admin.py에 등록한다
+3. models.py에는 들어가는 데이터의 형태에 대한 설계서이지 실제 DB에 만들어 진 것이 아니기 때문에 Power Shell에서 
+
+>python manage.py makemigrations  
+python manage.py migrate  
+
+순으로 migrate 해야 한다
+
+>여기서 고생이 많았는데 아무리 makemigrations를 해도 변화를 찾지 못해서이다. 처음엔 makemigrations 뒤에 app_name을 적어 해결되는 듯 했으나 그러면 0002의 새로운 파일이 생성되는 것이 아니라 0001의 Candidate 클래스가 만들어 진 곳에 오버라이드 되듯 덮어씌어졌다.
+그래서 찾은 해결법이 다른 폴더에 새로운 프로젝트를 생성하고 아무런 정보가 기록되지 않은 db.sqlite3를 기존의 파일에 덮어쓰기해서 해결했다.
 
 #### [ URL 다루기 ]
+1. 링크를 걸 위치에 동적인 url을 삽입
+    ```{.html}
+    <td> <a href = "areas/{{candidate.area}}/">{{candidate.area}}</a> </td>
+    ```
+
+2. url에 대한 등록을 위해 urls.py에 정규표현식을 활용하여 패턴 추가
+    ```{.python}
+    urlpatterns = [
+        url(r'^$', views.index),
+        url(r'^areas/(?P<area>.+)/$', views.areas)
+    ]
+    ```
+>이참에 정규표현식을 다시한번 복습하는 것도 좋을듯
 
 #### [ 여론조사 화면 구현 ]
+1. area에 따른 필터 결과를 html로 전달
+    ```{.python}
+    def areas(request, area):
+        candidates = Candidate.objects.filter(area = area) #Candidate의 area와 매개변수 area가 같은 객체만 불러오기
+        context = {'candidates': candidates,
+        'area' : area}
+        return render(request, 'elections/area.html', context)
+    ```
 
+2. 전달 받은 context를 for문으로 출력
+    ```{.python}
+    {% for candidate in candidates %}
+    <tr>
+        <td> {{candidate.name}}</td>
+        <td> {{candidate.introduction}}</td>
+        <td> 기호{{candidate.party_number}}번 </td>
+        <td>
+            <form action = "#" method = "post">
+                <button name="choice" value="#">선택</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    ```
+
+3. area에 현재 진행 중인 poll이 있는지 확인
+    ```{.python}
+    def areas(request, area):
+        today = datetime.datetime.now()
+        try :
+            poll = Poll.objects.get(area = area, start_date__lte = today, end_date__gte=today) # get에 인자로 조건을 전달해줍니다. 
+            candidates = Candidate.objects.filter(area = area) # Candidate의 area와 매개변수 area가 같은 객체만 불러오기
+        except:
+            poll = None
+            candidates = None
+        context = {'candidates': candidates,
+        'area' : area,
+        'poll' : poll }
+        return render(request, 'elections/area.html', context)
+    ```
+
+    - lte : less than equal  start_date__let = today (start_date <= today>)
+    - gte : greater than equal  end_date__gte = today (today >=end_date)
+
+4. html에 if를 사용해 결과가 있으면 표시하고 없으면 else를 이용해 없는 상태를 표시
+
+    ```{.html}
+    {% if poll %}
+    ...
+    {% else %}
+    여론조사가 없습니다
+    {% endif %}
+    ```
+
+**예외처리가 잘 되지 않는 경우 다음을 추가**
+    ```{.python}
+    # C:\Code\mysite\settings.py
+    ...
+    DATABASES = {
+        #유지해주세요
+    }
+    DATABASE_OPTIONS = {'charset': 'utf8'} #추가
+    TIME_ZONE = 'Asia/Seoul' #추가
+    LANGUAGE_CODE = 'ko-kr' #추가
+    ...
+    ```
 #### [ 여론조사 결과 저장 ]
+1. 투표 결과를 DB에 저장
+    - 해당 여론조사의 후보에게 투표할 경우 poll_id, cadidate_id 두 값을 가지고 투표 결과에 +1 시켜주면 된다
+    - 기존의 값이 없다면 get으로 값을 가져올 때 예외가 발생하므로 예외처리로 값이 없는 상태일 때 값을 생성해 주는 코드를 작성한다
 
+2. url.py에 url패턴 추가
+    ```{.python}
+    # C:\Code\mysite\elections\urls.py
+
+    # 코드 유지
+
+    urlpatterns = [
+        # 기존 url 유지
+        url(r'^polls/(?P<poll_id>\d+)/$', views.polls), #이 url에 대한 요청을 views.polls가 처리하게 만듭니다.
+    ]
+    ```
 Day 3 (17/12/18)
 
 #### [ 여론조사 결과보기1 - http redirect하기 ]
