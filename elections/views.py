@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from .models import Candidate, Poll, Choice
 from django.db.models import Sum
 import datetime as dt
@@ -70,6 +70,15 @@ def results(request, area):
         , 'poll_results' : poll_results}
     return render(request, 'elections/result.html', context)
 
+def candidates(response, name):
+    candidate = get_object_or_404(Candidate, name = name)
+    return HttpResponse(candidate.name)
 
+    # try:
+    #     candidates = Candidate.objects.get(name = name)
+    # except:
+    #     return HttpResponseNotFound("없다 없어")
+    #     return Http404         # 세가지 방법 중 하나
+    #     # return HttpResponse(candidates)
 
 
