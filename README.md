@@ -282,6 +282,8 @@ python manage.py migrate
     ```
 
 **예외처리가 잘 되지 않는 경우 다음을 추가**
+
+
     ```{.python}
     # C:\Code\mysite\settings.py
     ...
