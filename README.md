@@ -442,12 +442,4 @@ urlpatterns = [
     - staic 파일의 주소값을 적을 땐 {% static '경로' %}를 사용
 
 
-
-
-
-
-
-
-
-
-출처 : https://programmers.co.kr/learn/courses/6
+출처 : [장고를 활용한 웹사이트 만들기 with 정두식](https://programmers.co.kr/learn/courses/6)
