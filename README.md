@@ -157,8 +157,71 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
 
 #### ~~Day 1 정리 끝~~
 
-Day 2 (17/12/14)  
+Day 2 (17/12/15)  
 ~ 여론조사 화면 구현
+
+#### [ Template에 정보 채우기 ]
+이전 강의가 하드코딩된 데이터로 정적인 페이지를 만들었다면 이번 강의는 DB에 저장된 데이터를 통해 동적인 페이지를 만듬
+
+1. views.py에서 후보정보를 담아 html에 전달
+
+    ```{.python}
+    def index(request):
+        candidates = Candidate.objects.all()
+        context = {'candidates' : candidates} #context에 모든 후보에 대한 정보를 저장
+        return render(request, 'elections/index.html', context) # context로 html에 모든 후보에 대한 정보를 전달
+    ```
+    - 항상 불러오고자 하는 테이블의 데이터는 import한 상태에서 진행
+
+2. 위에서 넘겨준 데이터를 index.html에서 반복문으로 표현
+
+    ```{.html}
+    {% for candidate in candidates %}
+    <tr>
+        <td> {{ candidate.name }} </td>
+        <td> {{ candidate.introduction }} </td>
+        <td> {{ candidate.area }} </td>
+        <td>기호 {{ candidate.party_number }} 번</td>
+    </tr>
+    {% endfor %}
+    ```
+
+
+#### [ MVC 패턴 ]
+
+#### [ 여론조사 모델 ]
+
+#### [ URL 다루기 ]
+
+#### [ 여론조사 화면 구현 ]
+
+#### [ 여론조사 결과 저장 ]
+
+Day 3 (17/12/18)
+
+#### [ 여론조사 결과보기1 - http redirect하기 ]
+
+#### [ 여론조사 결과보기2 - 후보 표시하기 ]
+
+#### [ 여론조사 결과보기3 - Dictionary로 데이터 정리하기 ]
+
+#### [ 404 오류 ]
+
+#### [ 404페이지 변경하기 ]
+
+#### [ Template 상속 ]
+
+#### [ 네비게이션바 추가하기 ]
+
+#### [ 파일 사용하기 ]
+
+
+
+
+
+
+
+
 
 
 https://programmers.co.kr/learn/courses/6
