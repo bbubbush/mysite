@@ -16,6 +16,6 @@ class Poll(models.Model):
     area = models.CharField(max_length = 15)
 
 class Choice(models.Model):
-    poll = models.ForeignKey(Poll) #Poll 모델의 id를 이용
-    candidate = models.ForeignKey(Candidate)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE,) #Poll 모델의 id를 이용
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE,)
     votes = models.IntegerField(default = 0)
