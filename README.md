@@ -36,7 +36,7 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
 
 1. app 만들기
     - Power Shell으로 프로젝트 안으로 이동(manage.py가 있는 위치)
-    >python manage.py startapp {app_name
+    >python manage.py startapp {app_name}
     - 아무런 변화가 없지만 dir을 치면 app_name의 폴더가 생성되어 있음
 
 2. index 함수 만들기
