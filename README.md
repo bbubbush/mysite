@@ -94,7 +94,7 @@ Python이 먼저 설치되어 있어야 하고 pip가 깔려있어야 한다
 #### [ Django Admin ]
 1. admin 계정 만들기
     - Power Shell로 project_name으로 이동 후 아래 명령어 입력 
-    >python manage.py createsupersuer
+    >python manage.py createsuperuser
     - 순서대로 ID, email(생략가능),PassWord, PassWord 입력 
     - 서버실행 후 브라우저에 아래 주소 입력
     >localhost:8000/admin
